@@ -1,0 +1,23 @@
+{
+    "name": "majpage/simple-config",
+    "version": "0.1.0",
+    "description": "Simple PHP configuration system",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Wiktor Maj",
+            "email": "w.maj@majpage.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "SimpleConfig\\": "src/"
+        }
+    },
+    "require": {
+        "php" : ">=5.6",
+        "ext-json": "*",
+        "ext-mbstring": "*"
+    }
+}
