@@ -44,7 +44,7 @@ class ObjectNode extends Node implements AncestorNodeInterface, ValidatedNodeInt
         }
         $itemValues = new stdClass();
         foreach ($this->children as $name => $child) {
-            $itemValue = $child->validate(sprintf('%s.%s', $path, $name), $data->$name);
+            $itemValue = $child->validate(sprintf('%s.%s', $path, $name), isset($data) ? $data->$name : null);
             if (isset($itemValue)) {
                 $itemValues->$name = $itemValue;
             }

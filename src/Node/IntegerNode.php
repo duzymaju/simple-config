@@ -101,7 +101,7 @@ class IntegerNode extends Node implements ValidatedNodeInterface
      */
     public function validate($path, $data)
     {
-        if (isset($data) && !is_string($data)) {
+        if (isset($data) && !is_int($data)) {
             throw new InvalidDataException(sprintf('%s: Value is not an integer.', $path));
         }
         if ($this->required && !isset($data)) {

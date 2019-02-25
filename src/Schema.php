@@ -31,7 +31,7 @@ class Schema implements AncestorNodeInterface
     {
         $itemValues = new stdClass();
         foreach ($this->children as $name => $child) {
-            $itemValue = $child->validate($name, $data->$name);
+            $itemValue = $child->validate($name, isset($data->$name) ? $data->$name : null);
             if (isset($itemValue)) {
                 $itemValues->$name = $itemValue;
             }

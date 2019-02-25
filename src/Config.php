@@ -52,6 +52,16 @@ class Config implements JsonSerializable
     }
 
     /**
+     * Get defaults
+     *
+     * @return stdClass
+     */
+    public function getDefaults()
+    {
+        return $this->schema->validate(new stdClass());
+    }
+
+    /**
      * Set schema
      *
      * @param Schema $schema schema
