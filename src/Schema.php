@@ -2,13 +2,13 @@
 
 namespace SimpleConfig;
 
-use SimpleConfig\Node\AncestorNodeInterface;
-use SimpleConfig\Node\AncestorNodeTrait;
+use SimpleConfig\Node\ParamAncestorNodeInterface;
+use SimpleConfig\Node\ParamAncestorNodeTrait;
 use stdClass;
 
-class Schema implements AncestorNodeInterface
+class Schema implements ParamAncestorNodeInterface
 {
-    use AncestorNodeTrait;
+    use ParamAncestorNodeTrait;
 
     /**
      * End

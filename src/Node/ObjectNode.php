@@ -5,9 +5,9 @@ namespace SimpleConfig\Node;
 use SimpleConfig\Exception\InvalidDataException;
 use stdClass;
 
-class ObjectNode extends Node implements AncestorNodeInterface, ValidatedNodeInterface
+class ObjectNode extends Node implements ParamAncestorNodeInterface, ValidatedNodeInterface
 {
-    use AncestorNodeTrait;
+    use ParamAncestorNodeTrait;
 
     /** @var bool */
     private $required = false;

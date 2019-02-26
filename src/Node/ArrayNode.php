@@ -3,11 +3,12 @@
 namespace SimpleConfig\Node;
 
 use SimpleConfig\Exception\InvalidDataException;
-use stdClass;
+use SimpleConfig\Exception\InvalidSchemaException;
 
-class ArrayNode extends Node implements AncestorNodeInterface, ValidatedNodeInterface
+class ArrayNode extends Node implements ArrayAncestorNodeInterface, ValidatedNodeInterface
 {
-    use AncestorNodeTrait;
+    /** @var ValidatedNodeInterface */
+    protected $items;
 
     /** @var bool */
     private $required = false;
@@ -76,6 +77,78 @@ class ArrayNode extends Node implements AncestorNodeInterface, ValidatedNodeInte
     }
 
     /**
+     * Array items
+     *
+     * @return ArrayNode
+     */
+    public function arrayItems()
+    {
+        $this->items = new ArrayNode('', $this);
+
+        return $this->items;
+    }
+
+    /**
+     * Boolean node
+     *
+     * @return BooleanNode
+     */
+    public function booleanItems()
+    {
+        $this->items = new BooleanNode('', $this);
+
+        return $this->items;
+    }
+
+    /**
+     * Float node
+     *
+     * @return FloatNode
+     */
+    public function floatItems()
+    {
+        $this->items = new FloatNode('', $this);
+
+        return $this->items;
+    }
+
+    /**
+     * Integer node
+     *
+     * @return IntegerNode
+     */
+    public function integerItems()
+    {
+        $this->items = new IntegerNode('', $this);
+
+        return $this->items;
+    }
+
+    /**
+     * Object node
+     *
+     * @return ObjectNode
+     */
+    public function objectItems()
+    {
+        $this->items = new ObjectNode('', $this);
+
+        return $this->items;
+    }
+
+    /**
+     * String node
+     *
+     * @return StringNode
+     */
+    public function stringItems()
+    {
+        $this->items = new StringNode('', $this);
+
+        return $this->items;
+    }
+
+    /**
      * Validate
      *
      * @param string $path path
@@ -104,14 +177,23 @@ class ArrayNode extends Node implements AncestorNodeInterface, ValidatedNodeInte
         }
 
         return array_map(function ($item, $i) use ($path) {
-            $itemValues = new stdClass();
-            foreach ($this->children as $name => $child) {
-                $itemValue = $child->validate(sprintf('%s[%s].%s', $path, $i, $name), $item->$name);
-                if (isset($itemValue)) {
-                    $itemValues->$name = $itemValue;
-                }
-            }
-            return $itemValues;
+            return $this->items->validate(sprintf('%s[%s]', $path, $i), $item);
         }, $data, array_keys($data));
+    }
+
+    /**
+     * End
+     *
+     * @return ArrayAncestorNodeInterface|ParamAncestorNodeInterface
+     *
+     * @throws InvalidSchemaException
+     */
+    public function end()
+    {
+        if (!isset($this->items)) {
+            throw new InvalidSchemaException('Array items have to be defined.');
+        }
+
+        return parent::end();
     }
 }

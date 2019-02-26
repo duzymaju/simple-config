@@ -7,16 +7,16 @@ abstract class Node
     /** @var string */
     protected $name;
 
-    /** @var AncestorNodeInterface */
+    /** @var ArrayAncestorNodeInterface|ParamAncestorNodeInterface */
     private $parent;
 
     /**
      * Construct
      *
-     * @param string                $name   name
-     * @param AncestorNodeInterface $parent parent
+     * @param string                                                $name   name
+     * @param ArrayAncestorNodeInterface|ParamAncestorNodeInterface $parent parent
      */
-    public function __construct($name, AncestorNodeInterface $parent)
+    public function __construct($name, $parent)
     {
         $this->name = $name;
         $this->parent = $parent;
@@ -25,7 +25,7 @@ abstract class Node
     /**
      * End
      *
-     * @return AncestorNodeInterface
+     * @return ArrayAncestorNodeInterface|ParamAncestorNodeInterface
      */
     public function end()
     {

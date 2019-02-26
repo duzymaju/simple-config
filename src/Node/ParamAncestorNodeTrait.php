@@ -4,7 +4,7 @@ namespace SimpleConfig\Node;
 
 use SimpleConfig\Exception\NodeDuplicationException;
 
-trait AncestorNodeTrait
+trait ParamAncestorNodeTrait
 {
     /** @var ValidatedNodeInterface[] */
     protected $children = [];
@@ -107,7 +107,7 @@ trait AncestorNodeTrait
      *
      * @throws NodeDuplicationException
      */
-    public function addNodeIfUnique($name, ValidatedNodeInterface $node)
+    protected function addNodeIfUnique($name, ValidatedNodeInterface $node)
     {
         if (array_key_exists($name, $this->children)) {
             throw new NodeDuplicationException(sprintf('Node "%s" already exists.', $name));

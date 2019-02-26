@@ -2,61 +2,49 @@
 
 namespace SimpleConfig\Node;
 
-interface AncestorNodeInterface
+interface ArrayAncestorNodeInterface
 {
     /**
-     * Array node
-     *
-     * @param string $name name
+     * Array items
      *
      * @return ArrayNode
      */
-    public function arrayNode($name);
+    public function arrayItems();
 
     /**
      * Boolean node
      *
-     * @param string $name name
-     *
      * @return BooleanNode
      */
-    public function booleanNode($name);
+    public function booleanItems();
 
     /**
      * Float node
      *
-     * @param string $name name
-     *
      * @return FloatNode
      */
-    public function floatNode($name);
+    public function floatItems();
 
     /**
      * Integer node
      *
-     * @param string $name name
-     *
      * @return IntegerNode
      */
-    public function integerNode($name);
+    public function integerItems();
 
     /**
      * Object node
      *
-     * @param string $name name
-     *
      * @return ObjectNode
      */
-    public function objectNode($name);
+    public function objectItems();
 
     /**
      * String node
      *
-     * @param string $name name
-     *
      * @return StringNode
      */
-    public function stringNode($name);
+    public function stringItems();
 
     /**
      * End

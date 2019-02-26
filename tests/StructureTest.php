@@ -16,28 +16,29 @@ final class StructureTest extends TestCase
         $this->schema
             ->stringNode('stringNode')->end()
             ->objectNode('objectNode')
-                ->stringNode('stringIntoObject')
+                ->stringNode('stringInsideObject')
                     ->defaultValue('stringValue')
                     ->regExp('#[a-z](\.[0-9]+)?#i')
                     ->minLength(3)
                     ->maxLength(10)
                 ->end()
-                ->arrayNode('arrayIntoObject')
-                    ->stringNode('stringIntoObjectIntoArray')->end()
-                    ->floatNode('floatIntoObjectIntoArray')
-                        ->allowedValues([ 0.3, 4, 5.17 ])
+                ->arrayNode('arrayInsideObject')
+                    ->objectItems()
+                        ->stringNode('stringInsideObjectInsideArray')->end()
+                        ->floatNode('floatInsideObjectInsideArray')
+                            ->allowedValues([ 0.3, 4, 5.17 ])
+                        ->end()
                     ->end()
                 ->end()
             ->end()
             ->arrayNode('arrayNode')
-                ->defaultValue([])
-                ->integerNode('integerIntoArray')
+                ->defaultValue([ 11 ])
+                ->minLength(1)
+                ->maxLength(3)
+                ->integerItems()
                     ->minValue(10)
                     ->maxValue(20)
                     ->required()
-                ->end()
-                ->booleanNode('booleanIntoArray')
-                    ->defaultValue(true)
                 ->end()
             ->end()
         ;
@@ -52,9 +53,9 @@ final class StructureTest extends TestCase
         $config->setSchema($this->schema);
         $this->assertEquals((object) [
             'objectNode' => (object) [
-                'stringIntoObject' => 'stringValue',
+                'stringInsideObject' => 'stringValue',
             ],
-            'arrayNode' => [],
+            'arrayNode' => [ 11 ],
         ], $config->getDefaults());
     }
 
@@ -67,23 +68,21 @@ final class StructureTest extends TestCase
         $config->setSchema($this->schema);
         $data = (object) [
             'objectNode' => (object) [
-                'stringIntoObject' => 'abc.123',
-                'arrayIntoObject' => [
+                'stringInsideObject' => 'abc.123',
+                'arrayInsideObject' => [
                     (object) [
-                        'stringIntoObjectIntoArray' => 'def',
-                        'floatIntoObjectIntoArray' => 5.17,
+                        'stringInsideObjectInsideArray' => 'def',
+                        'floatInsideObjectInsideArray' => 5.17,
                     ],
                     (object) [
-                        'stringIntoObjectIntoArray' => 'ghi',
-                        'floatIntoObjectIntoArray' => 0.3,
+                        'stringInsideObjectInsideArray' => 'ghi',
+                        'floatInsideObjectInsideArray' => 0.3,
                     ],
                 ]
             ],
             'arrayNode' => [
-                (object) [
-                    'integerIntoArray' => 12,
-                    'booleanIntoArray' => false,
-                ],
+                12,
+                14,
             ],
         ];
         $config->setData($data);
@@ -99,23 +98,21 @@ final class StructureTest extends TestCase
         $config->setSchema($this->schema);
         $data = '{
             "objectNode": {
-                "stringIntoObject": "abc.123",
-                "arrayIntoObject": [
+                "stringInsideObject": "abc.123",
+                "arrayInsideObject": [
                     {
-                        "stringIntoObjectIntoArray": "def",
-                        "floatIntoObjectIntoArray": 5.17
+                        "stringInsideObjectInsideArray": "def",
+                        "floatInsideObjectInsideArray": 5.17
                     },
                     {
-                        "stringIntoObjectIntoArray": "ghi",
-                        "floatIntoObjectIntoArray": 0.3
+                        "stringInsideObjectInsideArray": "ghi",
+                        "floatInsideObjectInsideArray": 0.3
                     }
                 ]
             },
             "arrayNode": [
-                {
-                    "integerIntoArray": 12,
-                    "booleanIntoArray": false
-                }
+                12,
+                14
             ]
         }';
         $config->setData($data);
