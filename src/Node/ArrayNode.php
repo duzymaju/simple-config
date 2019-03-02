@@ -4,6 +4,7 @@ namespace SimpleConfig\Node;
 
 use SimpleConfig\Exception\InvalidDataException;
 use SimpleConfig\Exception\InvalidSchemaException;
+use stdClass;
 
 class ArrayNode extends Node implements ArrayAncestorNodeInterface, ValidatedNodeInterface
 {
@@ -160,6 +161,16 @@ class ArrayNode extends Node implements ArrayAncestorNodeInterface, ValidatedNod
      */
     public function validate($path, $data)
     {
+        if ($data instanceof stdClass) {
+            $arrayData = (array) $data;
+            $keys = array_keys($arrayData);
+            $notNumericKeys = array_filter($keys, function ($key) {
+                return !is_numeric($key);
+            });
+            if (count($notNumericKeys) === 0) {
+                $data = $arrayData;
+            }
+        }
         if (isset($data) && !is_array($data)) {
             throw new InvalidDataException(sprintf('%s: Value is not an array.', $path));
         }

@@ -44,9 +44,10 @@ class ObjectNode extends Node implements ParamAncestorNodeInterface, ValidatedNo
         }
         $itemValues = new stdClass();
         foreach ($this->children as $name => $child) {
-            $itemValue = $child->validate(sprintf('%s.%s', $path, $name), isset($data) ? $data->$name : null);
-            if (isset($itemValue)) {
-                $itemValues->$name = $itemValue;
+            $value = isset($data) && isset($data->$name) ? $data->$name : null;
+            $validValue = $child->validate(sprintf('%s.%s', $path, $name), $value);
+            if (isset($validValue)) {
+                $itemValues->$name = $validValue;
             }
         }
 

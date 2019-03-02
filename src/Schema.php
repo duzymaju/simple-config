@@ -23,17 +23,18 @@ class Schema implements ParamAncestorNodeInterface
     /**
      * Validate
      *
-     * @param mixed $data data
+     * @param stdClass $data data
      *
-     * @return mixed
+     * @return stdClass
      */
     public function validate($data)
     {
         $itemValues = new stdClass();
         foreach ($this->children as $name => $child) {
-            $itemValue = $child->validate($name, isset($data->$name) ? $data->$name : null);
-            if (isset($itemValue)) {
-                $itemValues->$name = $itemValue;
+            $value = isset($data) && isset($data->$name) ? $data->$name : null;
+            $validValue = $child->validate($name, $value);
+            if (isset($validValue)) {
+                $itemValues->$name = $validValue;
             }
         }
 
