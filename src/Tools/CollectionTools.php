@@ -16,7 +16,7 @@ class CollectionTools
      */
     public static function deepMerge($data, $patch)
     {
-        if (!self::isCollection($patch) || !self::isCollection($data)) {
+        if (!($patch instanceof stdClass) || !(is_array($data) || $data instanceof stdClass)) {
             return $patch;
         }
         $arrayData = (array) $data;
@@ -47,17 +47,5 @@ class CollectionTools
             }
         }
         return $arrayData;
-    }
-
-    /**
-     * Is collection
-     *
-     * @param mixed $value value
-     *
-     * @return bool
-     */
-    private static function isCollection($value)
-    {
-        return is_array($value) || $value instanceof stdClass;
     }
 }

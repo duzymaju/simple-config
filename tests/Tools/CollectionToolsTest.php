@@ -59,6 +59,15 @@ final class CollectionToolsTest extends TestCase
         $this->assertEquals($merge, CollectionTools::deepMerge($data, $patch));
     }
 
+    /** Test whole array replace */
+    public function testWholeArrayReplace()
+    {
+        $data = (object) [ 'a' => [ 1, 2, 3 ], 'b' => [ 4 ] ];
+        $patch = (object) [ 'a' => [ 5, 6 ] ];
+        $merge = (object) [ 'a' => [ 5, 6 ], 'b' => [ 4 ] ];
+        $this->assertEquals($merge, CollectionTools::deepMerge($data, $patch));
+    }
+
     /** Test multi-dimensional array merge */
     public function testMultiDimensionalArrayMerge()
     {
@@ -68,7 +77,7 @@ final class CollectionToolsTest extends TestCase
             2 => [ 51 ],
             3 => (object) [ 0 => 61 ],
         ] ] ];
-        $merge = (object) [ 'a' => (object) [ 'b' => [ [ 11 ], [ 41, 22 ], [ 51, 32 ], (object) [ 0 => 61 ] ] ] ];
+        $merge = (object) [ 'a' => (object) [ 'b' => [ [ 11 ], [ 41, 22 ], [ 51 ], (object) [ 0 => 61 ] ] ] ];
         $this->assertEquals($merge, CollectionTools::deepMerge($data, $patch));
     }
 
@@ -141,7 +150,7 @@ final class CollectionToolsTest extends TestCase
     public function testChangingAndRemovingElementsFromArray()
     {
         $data = (object) [ 'a' => [ (object) [ 'b' => 1 ], (object) [ 'c' => 2 ], (object) [ 'd' => 3 ] ] ];
-        $patch = (object) [ 'a' => (object) [ 0 => [ 'b' => 4 ], 2 => null ] ];
+        $patch = (object) [ 'a' => (object) [ 0 => (object) [ 'b' => 4 ], 2 => null ] ];
         $merge = (object) [ 'a' => [ (object) [ 'b' => 4 ], (object) [ 'c' => 2 ] ] ];
         $this->assertEquals($merge, CollectionTools::deepMerge($data, $patch));
     }
