@@ -17,6 +17,9 @@ class Config implements JsonSerializable
     /** @var Schema|null */
     private $schema;
 
+    /** @var bool */
+    private $compression = true;
+
     /**
      * Set data
      *
@@ -127,6 +130,20 @@ class Config implements JsonSerializable
     }
 
     /**
+     * Set compression
+     *
+     * @param bool $compression compression
+     *
+     * @return self
+     */
+    public function setCompression($compression)
+    {
+        $this->compression = $compression;
+
+        return $this;
+    }
+
+    /**
      * JSON serialize
      *
      * @return string
@@ -137,7 +154,11 @@ class Config implements JsonSerializable
     {
         $data = $this->hasData() ? $this->data : $this->getDefaults();
 
-        $json = json_encode($data);
+        $options = 0;
+        if (!$this->compression) {
+            $options |= JSON_PRETTY_PRINT;
+        }
+        $json = json_encode($data, $options);
         if ($json === false) {
             throw new InvalidJsonException('Configuration data cannot be serialized.');
         }

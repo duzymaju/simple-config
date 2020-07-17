@@ -40,7 +40,7 @@ final class StructureAndConfigTest extends TestCase
                     ->objectItems()
                         ->stringNode('stringInsideObjectInsideArray')->end()
                         ->floatNode('floatInsideObjectInsideArray')
-                            ->allowedValues([ 0.3, 4, 5.17 ])
+                            ->allowedValues([0.3, 4, 5.17])
                         ->end()
                         ->booleanNode('booleanInsideObjectInsideArray')
                             ->defaultValue(true)
@@ -49,7 +49,7 @@ final class StructureAndConfigTest extends TestCase
                 ->end()
             ->end()
             ->arrayNode('arrayNode')
-                ->defaultValue([ 11 ])
+                ->defaultValue([11])
                 ->minLength(1)
                 ->maxLength(3)
                 ->integerItems()
@@ -82,7 +82,7 @@ final class StructureAndConfigTest extends TestCase
             'objectNode' => (object) [
                 'stringInsideObject' => 'stringValue',
             ],
-            'arrayNode' => [ 11 ],
+            'arrayNode' => [11],
         ];
         $this->validChangedConfig = json_decode(json_encode($this->config));
         $this->validChangedConfig->objectNode->arrayInsideObject[0]->floatInsideObjectInsideArray = 5.17;
@@ -229,7 +229,7 @@ final class StructureAndConfigTest extends TestCase
         $config = new Config();
         $config->setSchema($this->schema);
         $data = (object) [
-            'arrayNode' => [ 12, 13, 14 ],
+            'arrayNode' => [12, 13, 14],
         ];
         $this->expectException(NoConfigException::class);
         $this->expectExceptionMessage('Configuration data has to be defined before change.');
@@ -395,7 +395,7 @@ final class StructureAndConfigTest extends TestCase
         $config = new Config();
         $config->setSchema($this->schema);
         $data = json_decode(json_encode($this->defaultConfig));
-        $data->arrayNode = [ 12, 13 ];
+        $data->arrayNode = [12, 13];
         $config->setData($data);
         $this->assertEquals(json_encode($data), $config->jsonSerialize());
     }
@@ -414,8 +414,20 @@ final class StructureAndConfigTest extends TestCase
         $config = new Config();
         $config->setSchema($this->schema);
         $data = json_decode(json_encode($this->defaultConfig));
-        $data->arrayNode = [ 12, 13 ];
+        $data->arrayNode = [12, 13];
         $config->setData($data);
         $this->assertEquals(json_encode($data), (string) $config);
+    }
+
+    /** Test converting to string of defined data without compression */
+    public function testConvertingToStringOfDefinedDataWithoutCompression()
+    {
+        $config = new Config();
+        $config->setCompression(false);
+        $config->setSchema($this->schema);
+        $data = json_decode(json_encode($this->defaultConfig));
+        $data->arrayNode = [12, 13];
+        $config->setData($data);
+        $this->assertEquals(json_encode($data, JSON_PRETTY_PRINT), (string) $config);
     }
 }
