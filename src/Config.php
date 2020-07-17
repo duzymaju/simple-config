@@ -31,7 +31,7 @@ class Config implements JsonSerializable
     public function setData($data, $validate = true)
     {
         $preparedData = $this->prepareData($data);
-        $this->data = $this->validate($preparedData, $validate);
+        $this->data = $validate ? $this->validate($preparedData) : $preparedData;
 
         return $this;
     }
@@ -51,7 +51,7 @@ class Config implements JsonSerializable
         }
         $preparedPatch = $this->prepareData($patch);
         $preparedData = $this->deepMerge($this->data, $preparedPatch);
-        $this->data = $this->validate($preparedData, $validate);
+        $this->data = $validate ? $this->validate($preparedData) : $preparedData;
 
         return $this;
     }
@@ -218,18 +218,14 @@ class Config implements JsonSerializable
     /**
      * Validate
      *
-     * @param stdClass $data     data
-     * @param bool     $validate validate
+     * @param stdClass $data data
      *
      * @return stdClass
      *
      * @throws NoSchemaException
      */
-    private function validate($data, $validate = true)
+    private function validate($data)
     {
-        if (!$validate) {
-            return $data;
-        }
         if (!isset($this->schema)) {
             throw new NoSchemaException('Schema has to be defined to validate configuration.');
         }
