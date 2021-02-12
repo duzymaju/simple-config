@@ -19,6 +19,7 @@ class CollectionTools
         if (!($patch instanceof stdClass) || !(is_array($data) || $data instanceof stdClass)) {
             return $patch;
         }
+
         $arrayData = (array) $data;
         foreach ((array) $patch as $key => $value) {
             if (isset($value)) {
@@ -46,6 +47,7 @@ class CollectionTools
                 $index--;
             }
         }
+
         return $arrayData;
     }
 }
